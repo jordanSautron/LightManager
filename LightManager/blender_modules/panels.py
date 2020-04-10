@@ -503,5 +503,5 @@ def extend_editor_menus(self, context):
 def register():
     bpy.types.VIEW3D_MT_editor_menus.append(extend_editor_menus)
 
-def unregsiter():
+def unregister():
     bpy.types.VIEW3D_MT_editor_menus.remove(extend_editor_menus)
