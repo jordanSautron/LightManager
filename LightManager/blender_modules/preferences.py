@@ -1,3 +1,7 @@
+"""
+    This module contains every addon's preferences
+"""
+
 import bpy
 from bpy.props import EnumProperty
 

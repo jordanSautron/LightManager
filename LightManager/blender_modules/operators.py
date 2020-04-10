@@ -1,9 +1,15 @@
+"""
+    This module contains every addon's Operators.
+"""
+
 import bpy
 
 from bpy.props import StringProperty
 
 
 class LightManager_OT_SwitchAreaSize(bpy.types.Operator):
+    """ Switch area light's size X and Y """
+
     bl_idname = "light_manager.switch_area_size"
     bl_label = "Switch area size"
 

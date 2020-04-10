@@ -1,3 +1,7 @@
+"""
+    This module contains every addon's panels / popovers
+"""
+
 import bpy
 
 from . import properties, preferences, operators
@@ -122,6 +126,8 @@ class MainPanel():
 
 
 class LIGHT_MANAGER_PT_MainHeader(bpy.types.Panel, MainPanel):
+    """ View3D Header popover who draw everything from MainPanel """
+
     bl_idname = 'LIGHT_MANAGER_PT_MainHeader'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'HEADER'
@@ -133,6 +139,8 @@ class LIGHT_MANAGER_PT_MainHeader(bpy.types.Panel, MainPanel):
 
 
 class LIGHT_MANAGER_PT_MainTools(bpy.types.Panel, MainPanel):
+    """ View3D UI panel (right side) who draw everything from MainPanel """
+
     bl_idname = 'LIGHT_MANAGER_PT_MainTools'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -480,7 +488,7 @@ class LIGHT_MANAGER_PT_LightSettings(bpy.types.Panel):
             )
 
 
-def extand_editor_menus(self, context):
+def extend_editor_menus(self, context):
     to_show = preferences.get_pref().ui_mode == 'HEADER'
     object_mode = context.mode == 'OBJECT'
     if to_show and object_mode:
@@ -493,7 +501,7 @@ def extand_editor_menus(self, context):
 
 
 def register():
-    bpy.types.VIEW3D_MT_editor_menus.append(extand_editor_menus)
+    bpy.types.VIEW3D_MT_editor_menus.append(extend_editor_menus)
 
 def unregsiter():
-    bpy.types.VIEW3D_MT_editor_menus.remove(extand_editor_menus)
+    bpy.types.VIEW3D_MT_editor_menus.remove(extend_editor_menus)
