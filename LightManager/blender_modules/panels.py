@@ -48,6 +48,7 @@ class MainPanel():
             emboss=False
             )
 
+        # Pinned
         row.prop(
             obj_props,
             'pinned',
