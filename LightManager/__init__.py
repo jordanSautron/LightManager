@@ -20,7 +20,7 @@ bl_info = {
     "author" : "Jordan Sautron",
     "description" : "Manage scene lights",
     "blender" : (2, 82, 0),
-    "version" : (1, 0, 2),
+    "version" : (1, 0, 3),
     "location" : "View 3D ",
     "warning" : "This addon only work on Blender 2.82 +",
     "category" : "Lighting"
