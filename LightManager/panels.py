@@ -94,14 +94,6 @@ class MainPanel():
             text=''
             )
 
-        # # Settings
-        # row.context_pointer_set('object', obj)
-        # row.popover(
-        #     LIGHT_MANAGER_PT_LightSettings.bl_idname, 
-        #     text="",
-        #     icon='OPTIONS'
-        #     )
-
         # Separator
         row.separator(factor=2)
         vis_row = row.row(align=True)
@@ -201,80 +193,70 @@ class LIGHT_MANAGER_PT_LightData(bpy.types.Panel):
 
     def draw_spot_type(self, context, obj, layout):
 
-        # Default engines
-        if context.engine in {'BLENDER_EEVEE', 'CYCLES', 'BLENDER_WORKBENCH'}:
+        # Show cone
+        layout.prop(
+            obj.data, 
+            'show_cone', 
+            text='Show Cone'
+            )
 
-            # Show cone
-            layout.prop(
-                obj.data, 
-                'show_cone', 
-                text='Show Cone'
-                )
+        # Size
+        layout.prop(
+            obj.data, 
+            'spot_size', 
+            text='Size'
+            )
 
-            # Size
-            layout.prop(
-                obj.data, 
-                'spot_size', 
-                text='Size'
-                )
-
-            # Blend
-            layout.prop(
-                obj.data, 
-                'spot_blend', 
-                text='Blend'
-                )
-
-        # UNKNOWN
-        else:
-            layout.label(text='Incompatible Engine', icon='ERROR')
+        # Blend
+        layout.prop(
+            obj.data, 
+            'spot_blend', 
+            text='Blend'
+            )
 
     def draw_area_type(self, context, obj, layout):
 
-        # Default engines
-        if context.engine in {'BLENDER_EEVEE', 'CYCLES', 'BLENDER_WORKBENCH'}:
-            
-            # Shape
+        # Shape
+        layout.prop(
+            obj.data,
+            'shape',
+            text='Shape'
+        )
+
+        layout.separator()
+
+        # Size
+        if obj.data.shape in {'SQUARE', 'DISK'}:
             layout.prop(
                 obj.data,
-                'shape',
-                text='Shape'
+                'size',
+                text='Diameter' if obj.data.shape == 'DISK' else 'size'
+            )
+        else:
+            row = layout.row(align=True)
+            col = row.column(align=True)
+
+            # Size x
+            col.prop(
+                obj.data,
+                'size',
+                text='Size X'
             )
 
-            layout.separator()
+            # Size Y
+            col.prop(
+                obj.data,
+                'size_y',
+                text='Y'
+            )
 
-            # Size
-            if obj.data.shape in {'SQUARE', 'DISK'}:
-                layout.prop(
-                    obj.data,
-                    'size',
-                    text='Diameter' if obj.data.shape == 'DISK' else 'size'
+            # Switch
+            op = row.operator(
+                operators.LightManager_OT_SwitchAreaSize.bl_idname,
+                text='', 
+                icon='FILE_REFRESH'
                 )
-            else:
-                row = layout.row(align=True)
-                col = row.column(align=True)
-
-                # Size x
-                col.prop(
-                    obj.data,
-                    'size',
-                    text='Size X'
-                )
-
-                # Size Y
-                col.prop(
-                    obj.data,
-                    'size_y',
-                    text='Y'
-                )
-
-                # Switch
-                op = row.operator(
-                    operators.LightManager_OT_SwitchAreaSize.bl_idname,
-                    text='', 
-                    icon='FILE_REFRESH'
-                    )
-                op.object_name = obj.name
+            op.object_name = obj.name
 
     def draw_blender_eevee(self, context, obj, layout):
         light = obj.data
@@ -343,7 +325,6 @@ class LIGHT_MANAGER_PT_LightData(bpy.types.Panel):
 
             # Sun angle
             if light.type == 'SUN':
-                # basic_body.separator()
                 shadow_body.prop(
                     light,
                     'angle',
