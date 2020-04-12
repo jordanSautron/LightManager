@@ -10,6 +10,11 @@ from bpy.app.handlers import persistent
 
 class LightManagerScene(bpy.types.PropertyGroup):
 
+    # UI
+    show_basic_settings = BoolProperty(default=True)
+    show_rays_settings = BoolProperty()
+    show_shadow_settings = BoolProperty()
+
     def get_lights(self):
         default_lights = []
         pinned_lights = []
@@ -20,6 +25,7 @@ class LightManagerScene(bpy.types.PropertyGroup):
                 else:
                     default_lights.append(obj)
         return default_lights, pinned_lights
+
 
 class LightManagerObject(bpy.types.PropertyGroup):
     pinned: BoolProperty()
