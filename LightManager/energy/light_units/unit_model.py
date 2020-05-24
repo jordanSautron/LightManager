@@ -2,7 +2,9 @@
 
 class EnergyUnit():
 
-    # Properties
+    # Attributes
+
+    need_light_source = False  # Set to True if the unit need the light source to be expose to the user
 
     @property
     def name(self):
@@ -19,8 +21,8 @@ class EnergyUnit():
 
     # Methods
 
-    def from_watts(self, watts, source_type):
+    def from_lumens(self, lumens, source_type):
         raise NotImplementedError(self)
 
-    def to_watts(self, energy, source_type):
+    def to_lumens(self, energy, source_type):
         raise NotImplementedError(self)

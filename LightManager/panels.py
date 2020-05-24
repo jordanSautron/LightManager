@@ -314,6 +314,12 @@ class LIGHT_MANAGER_PT_LightData(bpy.types.Panel):
                     'energy_unit',
                     text='Unit'
                 )
+                if obj_props.show_light_source:
+                    basic_body.prop(
+                        obj_props,
+                        'light_source',
+                        text='Source'
+                    )
                 basic_body.separator()
 
             # Specular

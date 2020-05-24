@@ -15,7 +15,7 @@ class LightSource():
         :param  efficacy: Light source efficacy, low efficacy cause a lot of energy lose
         :type   efficacy: int()
 
-        :param  description: Source type description for user (optional)
+        :param  description: Source type description for user
         :type   description: str()
         """
 

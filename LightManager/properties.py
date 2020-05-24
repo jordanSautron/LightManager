@@ -4,7 +4,13 @@
 
 import bpy
 
-from bpy.props import StringProperty, BoolProperty, PointerProperty, EnumProperty
+from bpy.props import (
+    StringProperty, 
+    BoolProperty, 
+    PointerProperty, 
+    EnumProperty, 
+    FloatProperty
+)
 from bpy.app.handlers import persistent
 
 from .energy import light_sources, light_units
@@ -13,9 +19,9 @@ from .energy import light_sources, light_units
 class LightManagerScene(bpy.types.PropertyGroup):
 
     # UI
-    show_basic_settings = BoolProperty(default=True)
-    show_rays_settings = BoolProperty()
-    show_shadow_settings = BoolProperty()
+    show_basic_settings: BoolProperty(default=True)
+    show_rays_settings: BoolProperty()
+    show_shadow_settings: BoolProperty()
 
     def get_lights(self):
         default_lights = []
@@ -63,19 +69,31 @@ class LightManagerObject(bpy.types.PropertyGroup):
             return value_idx
 
         def set(self, value_idx):
-            source = items[value_idx][0]
             unit = self.energy_unit
-            value = self.energy
-            self.id_data.data.energy = light_units.units_by_type[unit].to_watts(value, source)
+            
+            prev_value_idx = self.get('light_source', 0)
+            prev_source = items[prev_value_idx][0]
+            prev_lumen_value = light_units.units_by_type[unit].to_lumens(self.energy, prev_source)
+
             self['light_source'] = value_idx
+            new_source = items[value_idx][0]
+            self.energy = light_units.units_by_type[unit].from_lumens(prev_lumen_value, prev_source)
 
         return locals()
-    light_source: bpy.props.EnumProperty(**light_source())
+    light_source: EnumProperty(**light_source())
+
+    def show_light_source():
+
+        def get(self):
+            return light_units.units_by_type[self.energy_unit].need_light_source
+
+        return locals()
+    show_light_source: BoolProperty(**show_light_source())
 
     def energy_unit():
         items = [(u.type, u.name, u.description) for u in light_units.units]
         return locals()
-    energy_unit: bpy.props.EnumProperty(**energy_unit())
+    energy_unit: EnumProperty(**energy_unit())
 
     def energy():
         
@@ -83,15 +101,17 @@ class LightManagerObject(bpy.types.PropertyGroup):
             source = self.light_source
             unit = self.energy_unit
             watts = self.id_data.data.energy
-            return light_units.units_by_type[unit].from_watts(watts, source)
+            lumens_value = light_units.units_by_type['BLENDER_WATTS'].to_lumens(watts, source)
+            return light_units.units_by_type[unit].from_lumens(lumens_value, source)
 
         def set(self, value):
             source = self.light_source
             unit = self.energy_unit
-            self.id_data.data.energy = light_units.units_by_type[unit].to_watts(value, source)
+            lumens_value = light_units.units_by_type[unit].to_lumens(value, source)
+            self.id_data.data.energy = light_units.units_by_type['BLENDER_WATTS'].from_lumens(lumens_value, source)
 
         return locals()
-    energy: bpy.props.FloatProperty(**energy())
+    energy: FloatProperty(**energy())
 
 
 def get_props(item):

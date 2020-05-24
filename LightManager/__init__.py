@@ -26,6 +26,16 @@ bl_info = {
     "category" : "Lighting"
 }
 
+import logging
+
+# Logger setup
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+consoleHandler = logging.StreamHandler()
+consoleHandler.setFormatter(logging.Formatter('%(asctime)s  %(name)s  %(levelname)s: %(message)s'))
+logger.addHandler(consoleHandler)
+
+
 from . import auto_load
 
 auto_load.init()
