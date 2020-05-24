@@ -171,16 +171,6 @@ class LIGHT_MANAGER_PT_LightData(bpy.types.Panel):
             expand=True
         )
 
-        # Light source
-        source_row = layout.row(align=True)
-        source_row.use_property_split = True
-        source_row.use_property_decorate = False
-        source_row.prop(
-            properties.get_props(light_obj),
-            'light_source',
-            text='Light Source'
-        )
-
         # Type settings
         draw_settings = getattr(self, f'draw_{light_obj.data.type.lower()}_type', None)
         if draw_settings:
