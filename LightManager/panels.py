@@ -25,13 +25,13 @@ class MainPanel():
             layout.separator(factor=1)
 
             for obj in pinned_lights:
-                self.draw_lights(context, obj, pinned_col)
+                self.draw_light(context, obj, pinned_col)
 
         main_col = layout.column(align=True)
         for obj in main_lights:
-            self.draw_lights(context, obj, main_col)
+            self.draw_light(context, obj, main_col)
 
-    def draw_lights(self, context, obj, layout):
+    def draw_light(self, context, obj, layout):
         obj_props = properties.get_props(obj)
 
         box = layout.box()
@@ -148,8 +148,8 @@ class LIGHT_MANAGER_PT_LightData(bpy.types.Panel):
     bl_idname = 'LIGHT_MANAGER_PT_LightData'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'HEADER'
-    bl_label = "Light Type"
-    bl_ui_units_x = 10
+    bl_label = 'Light Type'
+    bl_ui_units_x = 15
 
     def draw(self, context):
         layout = self.layout  
@@ -170,6 +170,18 @@ class LIGHT_MANAGER_PT_LightData(bpy.types.Panel):
             text='Type',
             expand=True
         )
+
+        # Light source
+        source_row = layout.row(align=True)
+        source_row.use_property_split = True
+        source_row.use_property_decorate = False
+        source_row.prop(
+            properties.get_props(light_obj),
+            'light_source',
+            text='Light Source'
+        )
+
+        # Type settings
         draw_settings = getattr(self, f'draw_{light_obj.data.type.lower()}_type', None)
         if draw_settings:
             layout.separator()
@@ -261,6 +273,7 @@ class LIGHT_MANAGER_PT_LightData(bpy.types.Panel):
     def draw_blender_eevee(self, context, obj, layout):
         light = obj.data
         props = properties.get_props(context.scene)
+        obj_props = properties.get_props(obj)
 
         ## Basic (color & energy)
         basic_header, basic_body = draw_utils.collapsible_box(
@@ -282,11 +295,26 @@ class LIGHT_MANAGER_PT_LightData(bpy.types.Panel):
             )
 
             # Energy
-            basic_body.prop(
-                light,
-                'energy',
-                text='Strength' if light.type == 'SUN' else 'Power'
-            )
+            if light.type == 'SUN':
+                basic_body.prop(
+                    light,
+                    'energy',
+                    text='Strength'
+                )
+            else:
+                # row = basic_body.row(align=True)
+                basic_body.separator()
+                basic_body.prop(
+                    obj_props,
+                    'energy',
+                    text='Energy'
+                )
+                basic_body.prop(
+                    obj_props,
+                    'energy_unit',
+                    text='Unit'
+                )
+                basic_body.separator()
 
             # Specular
             basic_body.prop(
