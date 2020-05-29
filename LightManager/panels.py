@@ -17,6 +17,7 @@ class MainPanel():
 
         main_lights, pinned_lights = scene_props.get_lights()
 
+        # Draw pinned lights
         if pinned_lights:
             pinned_col = layout.column(align=True)
             row = pinned_col.row(align=True)
@@ -27,9 +28,18 @@ class MainPanel():
             for obj in pinned_lights:
                 self.draw_light(context, obj, pinned_col)
 
+        # Draw other lights
         main_col = layout.column(align=True)
         for obj in main_lights:
             self.draw_light(context, obj, main_col)
+
+        # Draw no lights
+        if not pinned_lights and not main_lights:
+            layout.label(
+                text='No light in current scene',
+                icon='INFO'
+            )
+
 
     def draw_light(self, context, obj, layout):
         obj_props = properties.get_props(obj)
@@ -363,7 +373,7 @@ class LIGHT_MANAGER_PT_LightData(bpy.types.Panel):
                 'use_contact_shadow',
                 text='Contact Shadows'
             )
-        
+
     def draw_cycles(self, context, obj, layout):
         light = obj.data
         props = properties.get_props(context.scene)
