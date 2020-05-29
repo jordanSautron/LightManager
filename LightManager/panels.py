@@ -377,6 +377,7 @@ class LIGHT_MANAGER_PT_LightData(bpy.types.Panel):
     def draw_cycles(self, context, obj, layout):
         light = obj.data
         props = properties.get_props(context.scene)
+        obj_props = properties.get_props(obj)
 
         ui_enable_rays = True
         ui_enable_shadow = True
@@ -402,11 +403,30 @@ class LIGHT_MANAGER_PT_LightData(bpy.types.Panel):
             )
 
             # Energy
-            basic_body.prop(
-                light,
-                'energy',
-                text='Strength' if light.type == 'SUN' else 'Power'
-            )
+            if light.type == 'SUN':
+                basic_body.prop(
+                    light,
+                    'energy',
+                    text='Strength'
+                )
+            else:
+                basic_body.separator()
+                basic_body.prop(
+                    obj_props,
+                    'energy',
+                    text='Energy'
+                )
+                basic_body.prop(
+                        obj_props,
+                        'energy_unit',
+                        text='Unit'
+                    )
+                if obj_props.show_light_source:
+                    basic_body.prop(
+                        obj_props,
+                        'light_source',
+                        text='Source'
+                    )
 
         ## Rays
         layout.separator(factor=1)
