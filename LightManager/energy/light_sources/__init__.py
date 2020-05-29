@@ -15,25 +15,25 @@ sources = [
     LightSource(
         name='LED',
         type='LED',
-        efficacy=90,
+        efficacy=172,
         description='Light Electro Diode'
     ),
     LightSource(
         name='Neon',
         type='FLUORESCENT',
-        efficacy=60,
+        efficacy=82,
         description='Fluorescent lamp'
     ),
     LightSource(
         name='Halogen',
         type='HALOGEN',
-        efficacy=20,
+        efficacy=35,
         description='Tungsten halogen lamp'
     ),
     LightSource(
         name='Incandescent Bulb',
         type='INCANDESCENT_LIGHT_BULB',
-        efficacy=15,
+        efficacy=18,
         description='Incandescent light bulb'
     )
 ]
